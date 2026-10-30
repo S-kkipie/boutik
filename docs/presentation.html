@@ -94,7 +94,7 @@
   }
   .nav button:focus-visible { outline: 3px solid var(--bolt); outline-offset: 2px; }
   .bar { flex: 1; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
-  .bar i { display: block; height: 100%; width: 0; background: var(--brand); transition: width .25s ease; }
+  .bar i { display: block; height: 100%; width: 100%; background: var(--brand); transform: scaleX(0); transform-origin: left; transition: transform .25s ease; }
   .count { font-size: .85rem; color: var(--muted); min-width: 44px; text-align: right; font-variant-numeric: tabular-nums; }
   @media (prefers-reduced-motion: reduce) { .slide, .bar i { transition: none; } }
 </style>
@@ -346,7 +346,7 @@
         s.setAttribute("aria-hidden", on ? "false" : "true");
         if (on) s.scrollTop = 0;
       });
-      bar.style.width = ((i + 1) / slides.length * 100) + "%";
+      bar.style.transform = "scaleX(" + ((i + 1) / slides.length) + ")";
       count.textContent = (i + 1) + " / " + slides.length;
       if (push) history.replaceState(null, "", "#" + (i + 1));
     }
