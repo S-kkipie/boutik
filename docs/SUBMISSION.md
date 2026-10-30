@@ -31,7 +31,7 @@ Every Dakar neighbourhood has a *boutique* that sells bread, rice, sugar and Caf
 - **Backend**: Python, FastAPI, SQLite, httpx against the LND REST API, server-side SVG QR codes with segno, BTC/EUR from mempool.space or CoinGecko with cache and fallback, converted at the fixed 655.957 XOF/EUR peg.
 - **AI**: Claude (`claude-opus-5-5`) with a strict JSON schema and low effort, re-validated with Pydantic; an offline rule-based French parser as fallback when there is no key or no network.
 - **Frontend**: a PWA in vanilla JavaScript with no framework and no build step. About 15 KB gzipped on first load, system fonts, emoji as product pictures, service worker with network-first and offline fallback, French first with English.
-- **Quality**: 27 pytest tests (parser, API, security) and an end-to-end script that runs the whole flow against the real nodes, including a check that the till's macaroon is refused by LND when it tries to pay.
+- **Quality**: 31 pytest tests (parser, API, security) and an end-to-end script that runs the whole flow against the real nodes, including a check that the till's macaroon is refused by LND when it tries to pay.
 
 ## Challenges we ran into
 

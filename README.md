@@ -5,6 +5,7 @@ Boutik lets a *boutiquier* take Lightning payments priced in FCFA, keep the pape
 - **Live demo:** https://boutik-demo.santiago-918.workers.dev (demo PIN `1234`, regtest coins with zero value; first visit after idle wakes the node in ~30 s)
 - **Video (3 min):** VIDEO_URL_PLACEHOLDER
 - **One-command setup:** `docker compose up --build`, then open http://localhost:8000
+- **CI:** [![ci](https://github.com/S-kkipie/boutik/actions/workflows/ci.yml/badge.svg)](https://github.com/S-kkipie/boutik/actions/workflows/ci.yml) — unit tests plus the full e2e flow against real LND nodes on every push
 
 | Till | Assistant | Lightning QR | Paid | Customer link | Day summary |
 |---|---|---|---|---|---|
@@ -262,10 +263,12 @@ The live demo runs the same code on **Cloudflare Containers** (`deploy/`):
 ```bash
 cd app
 pip install -e '.[dev]'
-pytest          # 27 tests: rule parser, API flows, security checks (fake LND)
+pytest          # 31 tests: rule parser, assistant fallback, API flows, security checks (fake LND)
 ```
 
-`./scripts/e2e.sh` (see above) runs the happy path against the real compose stack.
+`./scripts/e2e.sh` (see above) runs the happy path against the real compose stack; GitHub Actions runs both on every push (`.github/workflows/ci.yml`).
+
+The Claude path is covered with a mocked client (request shape, schema validation, fallback on API error, refusal or out-of-bounds output); it was not exercised against the live API during the hackathon build because no API key was configured.
 
 ## Project layout
 

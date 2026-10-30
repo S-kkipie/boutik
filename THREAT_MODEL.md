@@ -117,7 +117,7 @@ Scope: the code in this repository as deployed by `docker-compose.yml` (regtest)
 
 ## How we verified
 
-Unit and API tests (`cd app && pytest`, 27 tests, fake LND) include these security checks in `app/tests/test_api.py`:
+Unit and API tests (`cd app && pytest`, 31 tests, fake LND) include these security checks in `app/tests/test_api.py`:
 
 - `test_security_headers_and_auth_required`: CSP and `X-Frame-Options` present; API returns 401 without a session.
 - `test_csrf_header_required`: a POST without `X-Boutik: 1` is refused with 403.
