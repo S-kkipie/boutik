@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Boutik — pitch</title>
+<meta name="description" content="Boutik: a Lightning till and credit notebook for Dakar's corner shops. Dakar Bitcoin Hack 2026.">
+<style>
+  :root {
+    --bg: #f7f3ea; --card: #ffffff; --ink: #17171c; --muted: #5d5a52; --line: #e2dccd;
+    --brand: #0b5d43; --brand-soft: #e3f1ea; --bolt: #f2a007; --bolt-soft: #fff4d9; --danger: #b3261e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111214; --card: #1b1d20; --ink: #f2efe8; --muted: #a9a59b; --line: #2d3034;
+      --brand: #23a274; --brand-soft: #16302a; --bolt: #ffbf3c; --bolt-soft: #3a2f16; --danger: #ff8a80;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #111214; --card: #1b1d20; --ink: #f2efe8; --muted: #a9a59b; --line: #2d3034;
+    --brand: #23a274; --brand-soft: #16302a; --bolt: #ffbf3c; --bolt-soft: #3a2f16; --danger: #ff8a80;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink); overflow: hidden;
+    font: 18px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  .deck { position: fixed; inset: 0; }
+  .slide {
+    position: absolute; inset: 0; overflow-y: auto; overflow-x: hidden;
+    padding: clamp(20px, 5vh, 56px) 16px calc(84px + env(safe-area-inset-bottom));
+    opacity: 0; visibility: hidden; transition: opacity .25s ease;
+  }
+  .slide.on { opacity: 1; visibility: visible; }
+  .wrap { max-width: 980px; margin: 0 auto; }
+  @media (min-width: 720px) { .slide { padding-left: 48px; padding-right: 48px; } }
+  .kicker { font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--brand); font-weight: 700; margin: 0 0 14px; }
+  h1 { font-size: clamp(2.1rem, 7vw, 4.2rem); line-height: 1.02; margin: 0 0 18px; letter-spacing: -.02em; }
+  h2 { font-size: clamp(1.6rem, 5vw, 2.8rem); line-height: 1.08; margin: 0 0 18px; letter-spacing: -.01em; }
+  h3 { font-size: 1.05rem; margin: 0 0 6px; }
+  p { margin: 0 0 12px; }
+  .lead { font-size: clamp(1.05rem, 2.6vw, 1.35rem); color: var(--muted); max-width: 46ch; }
+  .rule { width: 56px; height: 4px; background: var(--bolt); border-radius: 2px; margin: 0 0 22px; }
+  .muted { color: var(--muted); }
+  .small { font-size: .85rem; }
+  .grid { display: grid; gap: 14px; }
+  @media (min-width: 720px) { .g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: repeat(3, 1fr); } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+  .card p:last-child { margin: 0; }
+  .num { font-size: clamp(1.8rem, 5vw, 2.6rem); font-weight: 800; color: var(--brand); line-height: 1; margin-bottom: 6px; }
+  .list { list-style: none; padding: 0; margin: 0; }
+  .list li { padding: 10px 0 10px 28px; border-bottom: 1px solid var(--line); position: relative; }
+  .list li:last-child { border-bottom: 0; }
+  .list li::before { content: ""; position: absolute; left: 4px; top: 19px; width: 10px; height: 10px; border-radius: 50%; background: var(--bolt); }
+  .compare { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  .compare th, .compare td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .compare th { font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .compare td:last-child { color: var(--brand); font-weight: 600; }
+  .shots { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  @media (min-width: 720px) { .shots { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .shots figure { margin: 0; }
+  .shots img { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--line); background: var(--card); }
+  .shots figcaption { font-size: .8rem; color: var(--muted); margin-top: 6px; }
+  .tag { display: inline-block; font-size: .78rem; padding: 3px 10px; border-radius: 999px; background: var(--bolt-soft); margin: 0 6px 6px 0; }
+  .tag.g { background: var(--brand-soft); }
+  .title-mark { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .title-mark svg { width: 64px; height: 64px; flex: none; }
+  .quote { border-left: 4px solid var(--bolt); padding: 6px 0 6px 14px; font-size: 1.1rem; margin: 18px 0; }
+  svg.arch { width: 100%; height: auto; display: block; }
+  svg.arch.tall { max-width: 420px; margin: 0 auto; }
+  svg.arch.wide { display: none; }
+  @media (min-width: 720px) { svg.arch.wide { display: block; } svg.arch.tall { display: none; } }
+  .kicker code { text-transform: none; letter-spacing: 0; }
+  svg.arch .box { fill: var(--card); stroke: var(--line); stroke-width: 1.5; }
+  svg.arch .box.brand { stroke: var(--brand); stroke-width: 2; }
+  svg.arch .box.bolt { stroke: var(--bolt); stroke-width: 2; }
+  svg.arch .zone { fill: none; stroke: var(--muted); stroke-dasharray: 6 5; stroke-width: 1.2; }
+  svg.arch text { fill: var(--ink); font: 600 14px system-ui, sans-serif; }
+  svg.arch text.sub { fill: var(--muted); font-weight: 400; font-size: 12px; }
+  svg.arch .wire { stroke: var(--ink); stroke-width: 1.6; fill: none; }
+  svg.arch .wire.dash { stroke-dasharray: 5 4; stroke: var(--muted); }
+  svg.arch .arrow { fill: var(--ink); }
+  a { color: var(--brand); }
+  code { font: .9em ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--card); border: 1px solid var(--line); padding: 1px 6px; border-radius: 6px; }
+  .nav {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 5; display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); background: var(--bg); border-top: 1px solid var(--line);
+  }
+  .nav button {
+    font: inherit; font-weight: 700; min-width: 52px; min-height: 48px; border-radius: 12px; border: 2px solid var(--line);
+    background: var(--card); color: var(--ink); cursor: pointer;
+  }
+  .nav button:focus-visible { outline: 3px solid var(--bolt); outline-offset: 2px; }
+  .bar { flex: 1; height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--brand); transition: width .25s ease; }
+  .count { font-size: .85rem; color: var(--muted); min-width: 44px; text-align: right; font-variant-numeric: tabular-nums; }
+  @media (prefers-reduced-motion: reduce) { .slide, .bar i { transition: none; } }
+</style>
+</head>
+<body>
+<main class="deck" id="deck" aria-live="polite">
+
+  <!-- 1 -->
+  <section class="slide" aria-label="Title">
+    <div class="wrap">
+      <div class="title-mark">
+        <svg viewBox="0 0 512 512" aria-hidden="true">
+          <rect width="512" height="512" rx="112" fill="#0b5d43"/>
+          <path d="M120 214 256 120l136 94v18H120z" fill="#f7f3ea"/>
+          <rect x="140" y="246" width="232" height="146" rx="14" fill="#f7f3ea"/>
+          <path d="M276 262 214 334h40l-18 50 64-78h-40l16-44z" fill="#f2a007"/>
+        </svg>
+        <p class="kicker" style="margin:0">Dakar Bitcoin Hack 2026 · BTrust</p>
+      </div>
+      <h1>Boutik</h1>
+      <div class="rule"></div>
+      <p class="lead">The Lightning till and credit notebook for Dakar's corner shops. Priced in FCFA. About 15&nbsp;KB on a mid-range phone.</p>
+      <p class="muted small">La caisse Lightning et le cahier de crédit du boutiquier.</p>
+    </div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide" aria-label="Problem">
+    <div class="wrap">
+      <p class="kicker">The problem</p>
+      <h2>The corner shop runs on cash, coins it doesn't have, and a paper notebook.</h2>
+      <div class="grid g3">
+        <div class="card"><h3>No change</h3><p class="muted">A 2 000 note for a baguette ends in "I'll owe you", a candy instead of coins, or a lost sale.</p></div>
+        <div class="card"><h3>Credit on paper</h3><p class="muted">The <em>cahier de crédit</em> gets lost or disputed, and nobody can pay a tab from far away.</p></div>
+        <div class="card"><h3>Wallets speak sats</h3><p class="muted">The shopkeeper thinks in FCFA and needs one button, one QR and a clear "Payé ✓".</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide" aria-label="Primary user">
+    <div class="wrap">
+      <p class="kicker">Primary user</p>
+      <h2>One person behind the counter, a mid-range Android, intermittent 3G.</h2>
+      <table class="compare">
+        <thead><tr><th>Today</th><th>With Boutik</th></tr></thead>
+        <tbody>
+          <tr><td>Counts change, runs out of coins</td><td>Says the sale, shows a QR, hears "Payé ✓"</td></tr>
+          <tr><td>Writes "Moussa 2 500" in a notebook</td><td>Records the ardoise in FCFA, sends a WhatsApp link</td></tr>
+          <tr><td>Waits for cash to come back</td><td>Moussa, or his son abroad, pays the link</td></tr>
+          <tr><td>Adds up the day on paper</td><td>Journal: total, Lightning vs cash, money owed</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide" aria-label="Solution">
+    <div class="wrap">
+      <p class="kicker">The solution</p>
+      <h2>Four screens, all in FCFA.</h2>
+      <div class="grid g2">
+        <div class="card"><h3>🧾 Caisse</h3><p class="muted">Tap products or type an amount. The server converts to sats, rounded up so the shop never gets less than the price.</p></div>
+        <div class="card"><h3>📒 Ardoises</h3><p class="muted">Debts stay in FCFA. The pay link creates a fresh invoice at today's rate when the customer opens it.</p></div>
+        <div class="card"><h3>🎙️ Assistant</h3><p class="muted">"2 pains, 3 cafés Touba et un sucre" → a draft cart. Claude when configured, offline French parser otherwise. It drafts; it never spends.</p></div>
+        <div class="card"><h3>👛 Portefeuille</h3><p class="muted">Balances in FCFA, receive on-chain, send behind PIN re-entry and a daily limit.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide" aria-label="Demo">
+    <div class="wrap">
+      <p class="kicker">Working MVP · real LND nodes · regtest</p>
+      <h2>From sentence to "Payé" in two taps.</h2>
+      <div class="shots">
+        <figure><img src="screenshots/03-assistant.png" alt="Assistant drafts a 1 300 FCFA cart from a French sentence" loading="lazy"><figcaption>1 · The assistant drafts the cart</figcaption></figure>
+        <figure><img src="screenshots/04-qr.png" alt="Lightning QR for 1 300 FCFA" loading="lazy"><figcaption>2 · Lightning QR, price in FCFA</figcaption></figure>
+        <figure><img src="screenshots/05-paid.png" alt="Full-screen paid confirmation" loading="lazy"><figcaption>3 · Paid, with chime and vibration</figcaption></figure>
+        <figure><img src="screenshots/08-client-page.png" alt="Customer pay link page for an ardoise of 2 500 FCFA" loading="lazy"><figcaption>4 · Customer settles an ardoise by link</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide" aria-label="Architecture">
+    <div class="wrap">
+      <p class="kicker">Architecture · one command: <code>docker compose up --build</code></p>
+      <h2>Two real Lightning nodes. The till can't spend.</h2>
+      <svg class="arch wide" viewBox="0 0 900 430" role="img" aria-labelledby="archT archD">
+        <title id="archT">Boutik architecture</title>
+        <desc id="archD">The phone PWA talks to the FastAPI app, the only published port. The app reaches the merchant LND node with an invoice-only macaroon and a spending macaroon, and the demo customer node with a demo macaroon. Both nodes use a regtest bitcoind. A one-shot bootstrap container is the only holder of admin macaroons. Node and bitcoind run on an internal network without internet.</desc>
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrow" d="M0 0 10 5 0 10z"/></marker></defs>
+        <rect class="box bolt" x="10" y="40" width="170" height="78" rx="14"/>
+        <text x="28" y="72">Shop phone</text><text class="sub" x="28" y="94">PWA · ~15 KB gzip</text>
+        <rect class="box" x="10" y="160" width="170" height="78" rx="14"/>
+        <text x="28" y="192">Customer phone</text><text class="sub" x="28" y="214">pay link /p/…</text>
+        <rect class="box brand" x="250" y="90" width="190" height="110" rx="14"/>
+        <text x="268" y="124">app</text><text class="sub" x="268" y="146">FastAPI + SQLite</text><text class="sub" x="268" y="166">read-only FS · no caps</text><text class="sub" x="268" y="186">only published port</text>
+        <rect class="zone" x="490" y="20" width="400" height="400" rx="18"/>
+        <text class="sub" x="506" y="44">internal network · no internet</text>
+        <rect class="box brand" x="520" y="64" width="170" height="86" rx="14"/>
+        <text x="538" y="96">lnd-merchant</text><text class="sub" x="538" y="118">LND v0.21.5</text>
+        <rect class="box" x="520" y="200" width="170" height="86" rx="14"/>
+        <text x="538" y="232">lnd-customer</text><text class="sub" x="538" y="254">demo only</text>
+        <rect class="box" x="740" y="132" width="130" height="86" rx="14"/>
+        <text x="758" y="164">bitcoind</text><text class="sub" x="758" y="186">regtest</text>
+        <rect class="box" x="520" y="326" width="350" height="72" rx="14" stroke-dasharray="6 4"/>
+        <text x="538" y="356">bootstrap (one-shot)</text><text class="sub" x="538" y="378">only holder of admin.macaroon · bakes the rest</text>
+        <path class="wire" d="M180 79 H215 V130 H248" marker-end="url(#ah)"/>
+        <path class="wire" d="M180 199 H215 V170 H248" marker-end="url(#ah)"/>
+        <path class="wire" d="M440 120 H518" marker-end="url(#ah)"/>
+        <text class="sub" x="446" y="110">pos · wallet</text>
+        <path class="wire" d="M440 175 H470 V243 H518" marker-end="url(#ah)"/>
+        <text class="sub" x="446" y="268">customer (demo)</text>
+        <path class="wire" d="M605 150 V198" marker-end="url(#ah)" marker-start="url(#ah)"/>
+        <text class="sub" x="612" y="180">10M sat channel</text>
+        <path class="wire" d="M690 107 H715 V160 H738" marker-end="url(#ah)"/>
+        <path class="wire" d="M690 243 H715 V190 H738" marker-end="url(#ah)"/>
+        <path class="wire dash" d="M605 326 V288"/>
+        <path class="wire dash" d="M805 326 V220"/>
+      </svg>
+      <svg class="arch tall" viewBox="0 0 360 640" role="img" aria-labelledby="archT2">
+        <title id="archT2">Boutik architecture (phone layout)</title>
+        <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrow" d="M0 0 10 5 0 10z"/></marker></defs>
+        <rect class="box bolt" x="0" y="0" width="172" height="64" rx="12"/>
+        <text x="14" y="28">Shop phone</text><text class="sub" x="14" y="48">PWA · ~15 KB gzip</text>
+        <rect class="box" x="188" y="0" width="172" height="64" rx="12"/>
+        <text x="202" y="28">Customer phone</text><text class="sub" x="202" y="48">pay link /p/…</text>
+        <path class="wire" d="M86 64 V96 H180 V114" marker-end="url(#ah2)"/>
+        <path class="wire" d="M274 64 V96 H180"/>
+        <rect class="box brand" x="60" y="116" width="240" height="84" rx="12"/>
+        <text x="76" y="144">app · FastAPI + SQLite</text><text class="sub" x="76" y="164">only published port</text><text class="sub" x="76" y="184">read-only FS · no capabilities</text>
+        <rect class="zone" x="0" y="240" width="360" height="396" rx="16"/>
+        <text class="sub" x="14" y="262">internal network · no internet</text>
+        <path class="wire" d="M120 200 V288" marker-end="url(#ah2)"/>
+        <text class="sub" x="126" y="232">pos · wallet</text>
+        <path class="wire" d="M250 200 V418" marker-end="url(#ah2)"/>
+        <text class="sub" x="256" y="232">customer (demo)</text>
+        <rect class="box brand" x="20" y="290" width="200" height="70" rx="12"/>
+        <text x="34" y="318">lnd-merchant</text><text class="sub" x="34" y="340">LND v0.21.5 · till can't spend</text>
+        <path class="wire" d="M120 360 V418" marker-end="url(#ah2)" marker-start="url(#ah2)"/>
+        <text class="sub" x="30" y="394">10M sat channel</text>
+        <rect class="box" x="20" y="420" width="320" height="64" rx="12"/>
+        <text x="34" y="448">lnd-customer</text><text class="sub" x="34" y="468">demo only · pays invoices on tap</text>
+        <rect class="box" x="236" y="290" width="104" height="70" rx="12"/>
+        <text x="248" y="318">bitcoind</text><text class="sub" x="248" y="340">regtest</text>
+        <rect class="box" x="20" y="530" width="320" height="86" rx="12" stroke-dasharray="6 4"/>
+        <text x="34" y="560">bootstrap (one-shot)</text><text class="sub" x="34" y="582">only holder of admin.macaroon,</text><text class="sub" x="34" y="600">bakes least-privilege macaroons</text>
+        <path class="wire dash" d="M180 530 V486"/>
+      </svg>
+      <p class="muted small">Optional egress from the app only: Claude API (assistant) and mempool.space / CoinGecko (BTC/EUR, converted at the fixed 655.957 XOF/EUR peg).</p>
+    </div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide" aria-label="Security by design">
+    <div class="wrap">
+      <p class="kicker">Security by design</p>
+      <h2>Least privilege, from the macaroon to the log line.</h2>
+      <ul class="list">
+        <li><strong>The till can only create invoices.</strong> <span class="muted">Tested: LND answers "permission denied" when the till's macaroon tries to pay. The app never sees admin.macaroon.</span></li>
+        <li><strong>Every send needs the PIN again</strong> <span class="muted">plus a network-prefix check, no zero-amount or expired invoices, a daily limit and a 1% fee cap.</span></li>
+        <li><strong>The assistant only drafts.</strong> <span class="muted">No tools, no macaroon. Output is schema-checked and totals are recomputed on the server.</span></li>
+        <li><strong>No PII or capabilities in logs.</strong> <span class="muted">Route templates only; invoices, hashes and pay-link tokens never written. Customer names never in invoices.</span></li>
+        <li><strong>Hardened web layer.</strong> <span class="muted">scrypt PIN + lockout, HttpOnly SameSite=Strict cookie, CSRF header, strict CSP, rate limits, read-only non-root container.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide" aria-label="Built for low bandwidth">
+    <div class="wrap">
+      <p class="kicker">UX for 3G and mid-range phones</p>
+      <h2>Fast because it's small.</h2>
+      <div class="grid g3">
+        <div class="card"><div class="num">≈15 KB</div><p class="muted">gzipped first load: HTML 1.5, app 8.5, helpers 2.4, CSS 2.7 KB</p></div>
+        <div class="card"><div class="num">0</div><p class="muted">frameworks, web fonts or build steps. QR codes are rendered on the server as SVG.</p></div>
+        <div class="card"><div class="num">52–64 px</div><p class="muted">touch targets, numeric keypad, daylight contrast, dark mode</p></div>
+      </div>
+      <p style="margin-top:16px"><span class="tag">Offline shell (service worker)</span><span class="tag">FCFA first, sats second</span><span class="tag">French + English</span><span class="tag">Plain-language errors</span><span class="tag g">Voice input</span></p>
+    </div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide" aria-label="Impact and metrics">
+    <div class="wrap">
+      <p class="kicker">Impact · what we will measure</p>
+      <h2>Change-free sales and tabs that actually get paid.</h2>
+      <div class="grid g2">
+        <div class="card">
+          <h3>Hypotheses to validate with real shops</h3>
+          <p class="muted">A boutique handles on the order of 100–300 transactions a day and 10–50 open ardoises. These are estimates, not pilot data.</p>
+        </div>
+        <div class="card">
+          <h3>Metrics</h3>
+          <ul class="list small">
+            <li>Time from "Encaisser" to "Payé"</li>
+            <li>Share of sales paid by Lightning</li>
+            <li>Ardoises repaid within 7 days</li>
+            <li>FCFA outstanding · failed payment rate</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide" aria-label="Next steps">
+    <div class="wrap">
+      <p class="kicker">Next iteration</p>
+      <h2>From regtest to the counter.</h2>
+      <ul class="list">
+        <li>Signet / mutinynet deployment</li>
+        <li>Phone-only non-custodial wallet via an LSP (Breez SDK or LDK Node)</li>
+        <li>Mobile-money off-ramp through a licensed partner</li>
+        <li>Wolof voice and interface, built with native speakers</li>
+        <li>Nostr Wallet Connect · multi-shop for cooperatives (GIE) · nostr receipts</li>
+      </ul>
+      <div class="quote">Open source, MIT. Try it: <code>docker compose up --build</code> → PIN <code>1234</code></div>
+      <p class="small">Code: https://github.com/S-kkipie/boutik<br>Live demo: https://boutik-demo.santiago-918.workers.dev<br>Video: VIDEO_URL</p>
+    </div>
+  </section>
+
+</main>
+
+<nav class="nav" aria-label="Slides">
+  <button id="prev" aria-label="Previous slide">←</button>
+  <div class="bar" aria-hidden="true"><i id="bar"></i></div>
+  <span class="count" id="count"></span>
+  <button id="next" aria-label="Next slide">→</button>
+</nav>
+
+<script>
+  (function () {
+    var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+    var bar = document.getElementById("bar");
+    var count = document.getElementById("count");
+    var i = 0;
+    function fromHash() {
+      var n = parseInt((location.hash || "").replace("#", ""), 10);
+      return n >= 1 && n <= slides.length ? n - 1 : 0;
+    }
+    function show(n, push) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach(function (s, k) {
+        var on = k === i;
+        s.classList.toggle("on", on);
+        s.setAttribute("aria-hidden", on ? "false" : "true");
+        if (on) s.scrollTop = 0;
+      });
+      bar.style.width = ((i + 1) / slides.length * 100) + "%";
+      count.textContent = (i + 1) + " / " + slides.length;
+      if (push) history.replaceState(null, "", "#" + (i + 1));
+    }
+    document.getElementById("prev").addEventListener("click", function () { show(i - 1, true); });
+    document.getElementById("next").addEventListener("click", function () { show(i + 1, true); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" || e.key === "PageDown" || (e.key === " " && !e.shiftKey)) { e.preventDefault(); show(i + 1, true); }
+      else if (e.key === "ArrowLeft" || e.key === "PageUp" || (e.key === " " && e.shiftKey)) { e.preventDefault(); show(i - 1, true); }
+      else if (e.key === "Home") show(0, true);
+      else if (e.key === "End") show(slides.length - 1, true);
+    });
+    var x0 = null, y0 = null;
+    document.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    document.addEventListener("touchend", function (e) {
+      if (x0 === null) return;
+      var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.4) show(i + (dx < 0 ? 1 : -1), true);
+      x0 = y0 = null;
+    }, { passive: true });
+    window.addEventListener("hashchange", function () { show(fromHash(), false); });
+    show(fromHash(), false);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# Single-container demo image: bitcoind (regtest) + 2 LND nodes + bootstrap + Boutik.
+# Used for the public demo (Cloudflare Containers). For local use prefer docker compose,
+# which isolates each process in its own container.
+# Build context: repository root.
+FROM lightninglabs/lnd:v0.21.5-beta AS lnd
+
+FROM bitcoin/bitcoin:29.5-alpine
+RUN apk add --no-cache python3 py3-pip su-exec bash \
+ && adduser -D -u 10001 -s /sbin/nologin boutik
+COPY --from=lnd /bin/lnd /usr/local/bin/
+WORKDIR /srv
+COPY app/pyproject.toml ./
+COPY app/boutik ./boutik
+RUN pip install --no-cache-dir --break-system-packages --no-compile .
+COPY deploy/run-all.sh /run-all.sh
+RUN chmod +x /run-all.sh
+ENV PYTHONUNBUFFERED=1
+EXPOSE 8000
+ENTRYPOINT ["/run-all.sh"]

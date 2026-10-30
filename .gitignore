@@ -1,0 +1,12 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.playwright-mcp/
+node_modules/
+.wrangler/
+*.sqlite3
+*.sqlite3-*
+*.egg-info/
+.impeccable/

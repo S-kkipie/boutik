@@ -1,0 +1,114 @@
+# Boutik — one command: `docker compose up --build`
+# Everything runs on a private regtest network. Coins have zero value.
+# Only the app port is published to the host; bitcoind and LND stay internal.
+
+x-lnd: &lnd
+  image: lightninglabs/lnd:v0.21.5-beta
+  restart: unless-stopped
+  depends_on: [bitcoind]
+  networks: [internal]
+
+services:
+  bitcoind:
+    image: bitcoin/bitcoin:29.5-alpine
+    restart: unless-stopped
+    command:
+      - -regtest=1
+      - -server=1
+      - -txindex=1
+      - -fallbackfee=0.0002
+      - -rpcbind=0.0.0.0
+      - -rpcallowip=0.0.0.0/0
+      - -rpcuser=${BITCOIN_RPC_USER:-boutik}
+      - -rpcpassword=${BITCOIN_RPC_PASSWORD:-regtest-only-not-a-secret}
+      - -zmqpubrawblock=tcp://0.0.0.0:28332
+      - -zmqpubrawtx=tcp://0.0.0.0:28333
+      - -maxtipage=2000000000   # regtest: never fall back into "initial block download"
+      - -printtoconsole=1
+    volumes: [bitcoind:/home/bitcoin/.bitcoin]
+    networks: [internal]
+
+  lnd-merchant:
+    <<: *lnd
+    hostname: lnd-merchant
+    command: &lndcmd
+      - --noseedbackup                 # regtest only: auto-create + unlock wallet
+      - --bitcoin.regtest
+      - --bitcoin.node=bitcoind
+      - --bitcoind.rpchost=bitcoind:18443
+      - --bitcoind.rpcuser=${BITCOIN_RPC_USER:-boutik}
+      - --bitcoind.rpcpass=${BITCOIN_RPC_PASSWORD:-regtest-only-not-a-secret}
+      - --bitcoind.zmqpubrawblock=tcp://bitcoind:28332
+      - --bitcoind.zmqpubrawtx=tcp://bitcoind:28333
+      - --rpclisten=0.0.0.0:10009
+      - --restlisten=0.0.0.0:8080
+      - --listen=0.0.0.0:9735
+      - --tlsextradomain=lnd-merchant
+      - --tlsextradomain=lnd-customer
+      - --trickledelay=500
+      - --debuglevel=info
+    volumes: [lnd-merchant:/root/.lnd]
+
+  lnd-customer:
+    <<: *lnd
+    hostname: lnd-customer
+    command: *lndcmd
+    volumes: [lnd-customer:/root/.lnd]
+
+  # One-shot: funds the nodes, opens a channel, bakes least-privilege macaroons.
+  # It is the only container that ever reads admin.macaroon.
+  bootstrap:
+    build: ./app
+    command: ["python", "-m", "boutik.bootstrap"]
+    user: "0"   # must read root-owned admin.macaroon; writes creds owned by the app user
+    restart: "no"
+    depends_on: [bitcoind, lnd-merchant, lnd-customer]
+    environment:
+      BITCOIN_RPC_URL: http://bitcoind:18443
+      BITCOIN_RPC_USER: ${BITCOIN_RPC_USER:-boutik}
+      BITCOIN_RPC_PASSWORD: ${BITCOIN_RPC_PASSWORD:-regtest-only-not-a-secret}
+    volumes:
+      - lnd-merchant:/lnd/merchant:ro
+      - lnd-customer:/lnd/customer:ro
+      - creds:/creds
+    networks: [internal]
+
+  app:
+    build: ./app
+    restart: unless-stopped
+    depends_on:
+      bootstrap:
+        condition: service_completed_successfully
+    ports:
+      - "${BOUTIK_PORT:-8000}:8000"
+    environment:
+      BOUTIK_NETWORK: regtest
+      BOUTIK_DEMO_MODE: ${BOUTIK_DEMO_MODE:-true}
+      BOUTIK_SHOP_NAME: ${BOUTIK_SHOP_NAME:-Boutique Keur Daba}
+      BOUTIK_PIN: ${BOUTIK_PIN:-1234}   # demo PIN, shown on the login screen in demo mode
+      BOUTIK_PUBLIC_URL: ${BOUTIK_PUBLIC_URL:-}
+      BOUTIK_COOKIE_SECURE: ${BOUTIK_COOKIE_SECURE:-false}
+      BOUTIK_RATE_SOURCE: ${BOUTIK_RATE_SOURCE:-auto}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      BOUTIK_ASSISTANT_MODEL: ${BOUTIK_ASSISTANT_MODEL:-claude-opus-5-5}
+      BOUTIK_DAILY_SEND_LIMIT_XOF: ${BOUTIK_DAILY_SEND_LIMIT_XOF:-100000}
+    volumes:
+      - creds:/creds:ro
+      - appdata:/data
+    networks: [internal, public]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+
+networks:
+  internal:
+    internal: true
+  public: {}
+
+volumes:
+  bitcoind: {}
+  lnd-merchant: {}
+  lnd-customer: {}
+  creds: {}
+  appdata: {}

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b5d43">
+  <meta name="description" content="Caisse Lightning et cahier de crédit pour boutiques de quartier. Prix en FCFA.">
+  <title>Boutik</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/static/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/static/icons/icon-192.png">
+  <link rel="stylesheet" href="/static/app.css">
+  <script type="module" src="/static/app.js"></script>
+</head>
+<body>
+  <div id="offline" class="banner" hidden>Hors ligne — les paiements reprendront dès le retour du réseau.</div>
+  <main id="app" aria-live="polite">
+    <p class="boot">Boutik…</p>
+  </main>
+  <nav id="tabs" class="tabs" hidden aria-label="Navigation">
+    <a href="#caisse" data-tab="caisse"><span aria-hidden="true">🧾</span><b data-i18n="tab_pos">Caisse</b></a>
+    <a href="#ardoises" data-tab="ardoises"><span aria-hidden="true">📒</span><b data-i18n="tab_credit">Ardoises</b></a>
+    <a href="#journal" data-tab="journal"><span aria-hidden="true">📊</span><b data-i18n="tab_sales">Journal</b></a>
+    <a href="#portefeuille" data-tab="portefeuille"><span aria-hidden="true">👛</span><b data-i18n="tab_wallet">Portefeuille</b></a>
+  </nav>
+  <div id="sheet" class="sheet" hidden role="dialog" aria-modal="true"></div>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
